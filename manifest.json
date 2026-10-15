@@ -1,18 +1,13 @@
 {
-  "name": "Haven — Private Media Vault",
+  "name": "Haven 離線私密相簿",
   "short_name": "Haven",
+  "description": "儲存在本機的照片與影片相簿",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#080808",
-  "theme_color": "#080808",
-  "description": "本機加密照片與影片收藏",
+  "background_color": "#080b12",
+  "theme_color": "#080b12",
   "icons": [
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]
 }
