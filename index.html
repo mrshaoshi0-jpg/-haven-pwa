@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080808">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Haven">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>Haven</title>
+<style>
+:root{color-scheme:dark;--bg:#080808;--panel:#141414;--panel2:#1d1d1d;--text:#f5f5f5;--muted:#929292;--line:#292929;--accent:#e8e8e8;--danger:#ff7777}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif}
+body{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}button,input{font:inherit}button{cursor:pointer}
+.wrap{max-width:760px;margin:0 auto;padding:24px 18px 36px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px}.brand{font-size:25px;font-weight:650;letter-spacing:-.8px}.sub{font-size:12px;color:var(--muted);letter-spacing:1.8px;text-transform:uppercase;margin-top:4px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:22px;animation:rise .35s ease both}.center{max-width:420px;margin:12vh auto 0;text-align:center}.mark{width:54px;height:54px;border:1px solid #444;border-radius:18px;display:grid;place-items:center;margin:0 auto 22px;font-size:24px}.heading{font-size:25px;font-weight:620;letter-spacing:-.6px;margin:0 0 9px}.desc{font-size:14px;color:var(--muted);line-height:1.6;margin:0 0 22px}
+.field{width:100%;background:#090909;border:1px solid #343434;color:white;border-radius:13px;padding:15px 14px;outline:none;margin:7px 0 12px}.field:focus{border-color:#888}.btn{border:1px solid #eee;background:#eee;color:#111;border-radius:13px;padding:14px 16px;font-weight:650;width:100%;transition:transform .16s,opacity .16s}.btn:active{transform:scale(.985)}.btn.secondary{background:#1b1b1b;color:#f5f5f5;border-color:#343434}.btn.danger{background:#281313;border-color:#522626;color:#ffb0b0}.tiny{font-size:12px;color:var(--muted);line-height:1.55}.status{min-height:20px;font-size:13px;color:#ff9b9b;margin:4px 0 12px}.toolbar{display:flex;gap:10px;align-items:center}.toolbar .btn{width:auto}.grow{flex:1}.count{color:var(--muted);font-size:13px;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.tile{position:relative;aspect-ratio:1;background:#181818;border:1px solid #292929;border-radius:12px;overflow:hidden;animation:rise .25s ease both}.tile img,.tile video{width:100%;height:100%;object-fit:cover;display:block}.tile .vid{position:absolute;right:8px;bottom:8px;background:#000b;border-radius:6px;padding:4px 6px;font-size:11px}.tile button{position:absolute;inset:0;width:100%;height:100%;background:transparent;border:0}
+.empty{border:1px dashed #343434;border-radius:18px;text-align:center;padding:44px 18px;color:var(--muted);line-height:1.7}.empty strong{display:block;color:#eee;font-size:16px;margin-bottom:8px}.section{margin:24px 0 12px;font-size:13px;color:var(--muted);letter-spacing:.8px}
+.viewer{position:fixed;inset:0;background:#000f;z-index:5;display:flex;align-items:center;justify-content:center;padding:24px 12px;animation:fade .2s ease}.viewer img,.viewer video{max-width:100%;max-height:78vh;object-fit:contain;border-radius:10px}.viewer video{width:100%}.close{position:absolute;top:calc(env(safe-area-inset-top) + 14px);right:16px;border:1px solid #444;background:#171717;color:#fff;border-radius:99px;padding:10px 15px}.viewactions{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 18px);left:16px;right:16px;display:flex;gap:10px;max-width:420px;margin:auto}.viewactions .btn{flex:1}
+.hidden{display:none!important}.footer{margin:28px 2px 0;text-align:center;color:#666;font-size:11px;line-height:1.6}
+@keyframes rise{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}@keyframes fade{from{opacity:0}to{opacity:1}}
+@media(min-width:560px){.grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.wrap{padding-top:36px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top"><div><div class="brand">Haven</div><div class="sub">Your private space</div></div><div id="topBadge" class="tiny">LOCAL VAULT</div></header>
+  <section id="auth" class="panel center">
+    <div class="mark">H</div>
+    <h1 id="authTitle" class="heading">你的私人空間</h1>
+    <p id="authDesc" class="desc">設定密碼，建立只儲存在這部裝置瀏覽器中的媒體庫。</p>
+    <form id="authForm">
+      <input id="pass1" class="field" type="password" autocomplete="new-password" minlength="6" maxlength="64" placeholder="設定至少 6 位密碼" required>
+      <input id="pass2" class="field" type="password" autocomplete="new-password" minlength="6" maxlength="64" placeholder="再次輸入密碼" required>
+      <button id="authBtn" class="btn" type="submit">建立 Haven</button>
+    </form>
+    <div id="authStatus" class="status"></div>
+    <p class="tiny">媒體會先在本機加密，再儲存到瀏覽器資料庫。請務必記住密碼；忘記後無法還原。</p>
+  </section>
+
+  <section id="vault" class="hidden">
+    <div class="toolbar">
+      <div class="grow"><h1 class="heading" style="margin-bottom:3px">你的收藏</h1><div class="tiny">加密儲存於此裝置</div></div>
+      <button id="lockBtn" class="btn secondary" style="width:auto">鎖定</button>
+    </div>
+    <div class="section">YOUR LIBRARY</div>
+    <div class="toolbar" style="margin-bottom:18px">
+      <button id="addBtn" class="btn" style="flex:1">＋ 匯入照片／影片</button>
+      <input id="fileInput" class="hidden" type="file" accept="image/*,video/*" multiple>
+    </div>
+    <p id="count" class="count">0 個項目</p>
+    <div id="grid" class="grid"></div>
+    <div id="empty" class="empty"><strong>這裡還是空的</strong>匯入照片或影片，建立你的私人收藏。</div>
+    <div class="section">SECURITY</div>
+    <div class="panel">
+      <p class="tiny" style="margin-top:0">此版本不會把媒體上傳到伺服器，也沒有帳號或雲端同步。瀏覽器資料仍可能因清除網站資料、系統回收儲存空間或裝置故障而遺失。</p>
+      <button id="wipeBtn" class="btn danger">刪除 Haven 內全部資料</button>
+    </div>
+  </section>
+  <div class="footer">HAVEN · LOCAL FIRST<br>請勿把此網頁的公開網址當作秘密；真正的保護依賴裝置安全與你設定的密碼。</div>
+</main>
+<div id="viewer" class="viewer hidden">
+  <button id="closeViewer" class="close">關閉</button>
+  <div id="viewerMedia"></div>
+  <div class="viewactions"><button id="deleteBtn" class="btn danger">刪除此項目</button></div>
+</div>
+<script>
+(() => {
+'use strict';
+const $ = id => document.getElementById(id);
+const DB_NAME = 'haven-vault-db', STORE = 'media', META_KEY = 'haven-vault-meta-v1';
+let db, cryptoKey = null, items = [], urls = new Map(), activeItem = null, busy = false, pickingFiles = false;
+
+function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(STORE))req.result.createObjectStore(STORE,{keyPath:'id'});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
+function txDone(tx){return new Promise((resolve,reject)=>{tx.oncomplete=resolve;tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error);});}
+async function allRecords(){return new Promise((resolve,reject)=>{const tx=db.transaction(STORE,'readonly'),req=tx.objectStore(STORE).getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error);});}
+async function putRecord(record){const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(record);await txDone(tx);}
+async function deleteRecord(id){const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).delete(id);await txDone(tx);}
+async function clearRecords(){const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).clear();await txDone(tx);}
+const bytesToB64 = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes)));
+const b64ToBytes = str => Uint8Array.from(atob(str), c=>c.charCodeAt(0));
+const randomBytes = n => crypto.getRandomValues(new Uint8Array(n));
+async function deriveKey(pass,salt){const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:180000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+async function encryptBytes(key,bytes){const iv=randomBytes(12);const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,bytes);return {iv:bytesToB64(iv),cipher};}
+async function decryptBytes(key,iv,cipher){return crypto.subtle.decrypt({name:'AES-GCM',iv:b64ToBytes(iv)},key,cipher);}
+function showAuth(isSetup){$('auth').classList.remove('hidden');$('vault').classList.add('hidden');$('pass2').classList.toggle('hidden',!isSetup);$('pass2').required=isSetup;$('authTitle').textContent=isSetup?'建立你的私人空間':'歡迎回來';$('authDesc').textContent=isSetup?'設定密碼，建立只儲存在這部裝置瀏覽器中的媒體庫。':'輸入密碼以解鎖你的本機媒體庫。';$('authBtn').textContent=isSetup?'建立 Haven':'解鎖 Haven';$('pass1').value='';$('pass2').value='';$('pass1').placeholder=isSetup?'設定至少 6 位密碼':'輸入密碼';$('pass1').setAttribute('autocomplete',isSetup?'new-password':'current-password');$('authStatus').textContent='';}
+function revokeUrls(){for(const u of urls.values())URL.revokeObjectURL(u);urls.clear();}
+async function loadVault(){revokeUrls();items=await allRecords();items.sort((a,b)=>b.added-a.added);$('vault').classList.remove('hidden');$('auth').classList.add('hidden');await renderGrid();}
+async function renderGrid(){revokeUrls();$('grid').innerHTML='';$('count').textContent=`${items.length} 個項目`;$('empty').classList.toggle('hidden',items.length!==0);for(const item of items){try{const plain=await decryptBytes(cryptoKey,item.iv,item.cipher);const blob=new Blob([plain],{type:item.mime});const url=URL.createObjectURL(blob);urls.set(item.id,url);const tile=document.createElement('div');tile.className='tile';if(item.mime.startsWith('image/')){const img=document.createElement('img');img.src=url;img.alt='私人照片';tile.appendChild(img);}else{const vid=document.createElement('div');vid.style.cssText='height:100%;display:grid;place-items:center;font-size:32px';vid.textContent='▶';tile.appendChild(vid);const tag=document.createElement('span');tag.className='vid';tag.textContent='VIDEO';tile.appendChild(tag);}const hit=document.createElement('button');hit.setAttribute('aria-label','開啟媒體');hit.addEventListener('click',()=>openViewer(item));tile.appendChild(hit);$('grid').appendChild(tile);}catch(e){console.error('Unable to decrypt item',e);}}}
+async function openViewer(item){activeItem=item;const url=urls.get(item.id);$('viewerMedia').innerHTML='';let el;if(item.mime.startsWith('video/')){el=document.createElement('video');el.controls=true;el.playsInline=true;el.src=url;}else{el=document.createElement('img');el.src=url;el.alt='私人照片';} $('viewerMedia').appendChild(el);$('viewer').classList.remove('hidden');}
+function closeViewer(){$('viewer').classList.add('hidden');$('viewerMedia').innerHTML='';activeItem=null;}
+async function lock(){cryptoKey=null;closeViewer();revokeUrls();items=[];$('grid').innerHTML='';showAuth(false);}
+$('authForm').addEventListener('submit',async e=>{e.preventDefault();if(busy)return;busy=true;const pass=$('pass1').value;const pass2=$('pass2').value;const meta=localStorage.getItem(META_KEY);try{$('authStatus').textContent='正在處理…';if(!meta){if(pass.length<6)throw new Error('密碼至少需要 6 個字元。');if(pass!==pass2)throw new Error('兩次輸入的密碼不一致。');const salt=randomBytes(16);const key=await deriveKey(pass,salt);const check=await encryptBytes(key,new TextEncoder().encode('HAVEN_UNLOCK_OK'));localStorage.setItem(META_KEY,JSON.stringify({salt:bytesToB64(salt),iv:check.iv,check:bytesToB64(check.cipher)}));cryptoKey=key;}else{const m=JSON.parse(meta);const key=await deriveKey(pass,b64ToBytes(m.salt));const plain=await decryptBytes(key,m.iv,b64ToBytes(m.check));if(new TextDecoder().decode(plain)!=='HAVEN_UNLOCK_OK')throw new Error('密碼錯誤。');cryptoKey=key;}await loadVault();}catch(err){$('authStatus').textContent=err.message==='The operation failed for an operation-specific reason.'?'密碼錯誤，或加密資料無法讀取。':(err.message||'發生錯誤，請再試一次。');cryptoKey=null;}finally{busy=false;}});
+$('addBtn').addEventListener('click',()=>{pickingFiles=true;$('fileInput').click();});
+$('fileInput').addEventListener('change',async e=>{pickingFiles=false;const files=Array.from(e.target.files||[]);if(!files.length)return;busy=true;$('addBtn').textContent='正在加密匯入…';$('addBtn').disabled=true;try{for(const file of files){if(!file.type.startsWith('image/')&&!file.type.startsWith('video/'))continue;const data=await file.arrayBuffer();const enc=await encryptBytes(cryptoKey,data);await putRecord({id:crypto.randomUUID(),mime:file.type||'application/octet-stream',iv:enc.iv,cipher:enc.cipher,added:Date.now()});}await loadVault();}catch(err){alert('匯入失敗。檔案可能太大，或瀏覽器儲存空間不足。請先嘗試較小的檔案。');}finally{busy=false;$('addBtn').textContent='＋ 匯入照片／影片';$('addBtn').disabled=false;$('fileInput').value='';}});
+$('lockBtn').addEventListener('click',lock);
+$('closeViewer').addEventListener('click',closeViewer);
+$('viewer').addEventListener('click',e=>{if(e.target===$('viewer'))closeViewer();});
+$('deleteBtn').addEventListener('click',async()=>{if(!activeItem)return;if(!confirm('確定永久刪除這個項目？'))return;const id=activeItem.id;closeViewer();await deleteRecord(id);items=items.filter(x=>x.id!==id);await renderGrid();});
+$('wipeBtn').addEventListener('click',async()=>{if(!confirm('這會刪除 Haven 內所有加密媒體與密碼設定，無法復原。確定繼續？'))return;if(!confirm('最後確認：你已接受所有 Haven 內資料都會消失。'))return;revokeUrls();await clearRecords();localStorage.removeItem(META_KEY);cryptoKey=null;items=[];showAuth(true);});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){pickingFiles=false;return;}if(cryptoKey&&!busy&&!pickingFiles)lock();});
+(async()=>{try{db=await openDB();if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});showAuth(!localStorage.getItem(META_KEY));}catch(e){$('authStatus').textContent='無法啟動本機資料庫。請用 Safari 開啟 HTTPS 網址後重試。';showAuth(true);}})();
+})();
+</script>
+</body>
+</html>
